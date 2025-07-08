@@ -131,29 +131,6 @@ $Panther = 'C:\Windows\Panther'
 $UnattendPath = "$Panther\Unattend.xml"
 $UnattendXml | Out-File -FilePath $UnattendPath -Encoding utf8 -Width 2000 -Force
 
-[cmdletbinding(DefaultParameterSetName="Decrapifier")]
-param (
-	[switch]$AllApps, 
-    [switch]$LeaveTasks,
-    [switch]$LeaveServices,
-	[switch]$AppAccess,
-	[switch]$OneDrive,
-	[switch]$Xbox,
-	[switch]$Tablet,
-	[switch]$Cortana,
-    [switch]$ClearStart,
-	[switch]$NoLog,
-    [Parameter(ParameterSetName="AppsOnly")]
-    [switch]$AppsOnly,
-    [Parameter(ParameterSetName="SettingsOnly")]
-    [switch]$SettingsOnly
-	)
-
-#------USER EDITABLE VARIABLES - change these to your tastes!------
-
-#Apps to keep. Wildcard is implied so try to be specific enough to not overlap with apps you do want removed. 
-#Make sure not begin or end with a | (vertical line) ex: "app|app2" - good. "|app|app2|" - bad.
-
 $GoodApps =	"store|calculator|sticky|windows.photos|soundrecorder|mspaint|screensketch|notepad"
 
 #Start Menu XML. If you run the script without -ClearStart, the XML below will be used for a custom start layout. By default it just leaves File Explorer, classic Control Panel, and Snipping Tool tiles.
@@ -161,50 +138,6 @@ $GoodApps =	"store|calculator|sticky|windows.photos|soundrecorder|mspaint|screen
 #	$StartLayourStr = @"
 #	<**YOUR START LAYOUT XML**>
 #	"@
-
-$StartLayoutStr = @" 
-<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
-  <LayoutOptions StartTileGroupCellWidth="6" />
-  <DefaultLayoutOverride>
-    <StartLayoutCollection>
-      <defaultlayout:StartLayout GroupCellWidth="6">
-        <start:Group Name="Applications">
-          <start:DesktopApplicationTile Size="2x2" Column="0" Row="0" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\SAP Business One\SAP Business One.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="2" Row="0" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Google Chrome.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="4" Row="0" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\GuideTI.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="0" Row="2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\L.I.S.A\L.I.S.A..lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="2" Row="2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Accessories\Snipping Tool.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="4" Row="2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="0" Row="4" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\File Explorer.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="2" Row="4" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Teamcenter10\Teamcenter 10 (FR).lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="4" Row="4" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\UpdateLisa64.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="0" Row="6" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Solid Edge ST9\Solid Edge ST9.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="2" Row="6" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Solid Edge Viewer 9.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="4" Row="6" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\KeyShot 6 64\KeyShot 6 64.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="4" Row="0" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\UPS\UPS WorldShip.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="0" Row="6" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Dicom Express.lnk" /> 
-        </start:Group>
-        <start:Group Name="System Tools">
-          <start:DesktopApplicationTile Size="2x2" Column="0" Row="0" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\Administrative Tools.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="2" Row="0" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\Control Panel.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="4" Row="0" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\System Tools\Task Manager.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="0" Row="2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\Run.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="2" Row="2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\Command Prompt.lnk" />
-          <start:DesktopApplicationTile Size="2x2" Column="4" Row="2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk" />
-        </start:Group>
-      </defaultlayout:StartLayout>
-    </StartLayoutCollection>
-  </DefaultLayoutOverride>
-</LayoutModificationTemplate>
-"@
-
-#------End editable variables------
-
-#---Functions---
-
-#Appx removal
-#Removes all apps or some apps depending on switches used.
-
 Function RemoveApps {
 	#SafeApps contains apps that shouldn't be removed, or just can't and cause errors
 	$SafeApps = "AAD.brokerplugin|accountscontrol|apprep.chxapp|assignedaccess|asynctext|bioenrollment|capturepicker|cloudexperience|contentdelivery|desktopappinstaller|ecapp|getstarted|immersivecontrolpanel|lockapp|MicrosoftEdge.Stable|net.native|oobenet|parentalcontrols|PPIProjection|sechealth|secureas|shellexperience|vclibs|xaml|XGpuEject"
@@ -241,26 +174,6 @@ Function RemoveApps {
 } #End Function RemoveApps
 		
 	
-	
-	#If ($AllApps) {  
-       # Write-Host "***Removing all apps and provisioned appx packages for this machine...***"
-		#2 passes intentional.
-        #Get-AppxPackage -allusers | where-object {$_.name -notmatch $SafeApps} | Remove-AppxPackage -erroraction silentlycontinue
-       # Get-AppxPackage -allusers | where-object {$_.name -notmatch $SafeApps} | Remove-AppxPackage -erroraction silentlycontinue
-       # Get-AppxProvisionedPackage -online | where-object {$_.displayname -notmatch $SafeApps} |  Remove-AppxProvisionedPackage -online -erroraction silentlycontinue
-       
-#}    Else {
-		#$SafeApps = "$SafeApps|$GoodApps"
-		#Write-Host "***Removing many apps and provisioned appx packages for this machine...***"
-		#2 passes intentional.		
-        #Get-AppxPackage -allusers | where-object {$_.name -notmatch $SafeApps} | Remove-AppxPackage -erroraction silentlycontinue
-        #Get-AppxPackage -allusers | where-object {$_.name -notmatch $SafeApps} | Remove-AppxPackage -erroraction silentlycontinue
-        #Get-AppxProvisionedPackage -online | where-object {$_.displayname -notmatch $SafeApps} | Remove-AppxProvisionedPackage -online -erroraction silentlycontinue
-#}        
-
-
-#Disable scheduled tasks
-#Tasks: Various CEIP and information gathering/sending tasks.
 Function DisableTasks {
     If ($LeaveTasks) {
         Write-Host "***Leavetasks switch set - leaving scheduled tasks alone...***" 
@@ -675,29 +588,8 @@ If ($NoLog) {
 	Start-Transcript $ENV:SYSTEMDRIVE\WindowsDCtranscript.txt
 }
 Write-Host "******Decrapifying Windows 10...******"
-If ($AppsOnly) {
-    RemoveApps
-    ClearStartMenu
-    Goodbye
-}Elseif ($SettingsOnly) {
-    DisableTasks
-    DisableServices
-    RegChange
-    ClearStartMenu
-    Goodbye
-}Else {
-	RemoveApps
-    DisableTasks
-    DisableServices
-    RegChange
-    ClearStartMenu
-    Goodbye
-}
-
-If ($NoLog) {
-}Else  {
-	Stop-Transcript
-}
+RemoveApps
+ClearStartMenu
 
 #Restart
 restart-computer
