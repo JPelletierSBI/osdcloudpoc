@@ -64,8 +64,7 @@ if (Test-DISMFromOSDCloudUSB -eq $true){
 }
 #>
 #Enable HPIA | Update HP BIOS | Update HP TPM
-
-<#if (Test-HPIASupport){
+if (Test-HPIASupport){
     #$Global:MyOSDCloud.DevMode = [bool]$True
     $Global:MyOSDCloud.HPTPMUpdate = [bool]$True
     if ($Product -ne '83B2'){$Global:MyOSDCloud.HPIAALL = [bool]$true} #I've had issues with this device and HPIA
@@ -75,7 +74,7 @@ if (Test-DISMFromOSDCloudUSB -eq $true){
     iex (irm https://raw.githubusercontent.com/gwblok/garytown/master/OSD/CloudOSD/Manage-HPBiosSettings.ps1)
     Manage-HPBiosSettings -SetSettings
 }
-#>
+
 
 
 
