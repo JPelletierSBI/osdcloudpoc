@@ -131,7 +131,7 @@ $Panther = 'C:\Windows\Panther'
 $UnattendPath = "$Panther\Unattend.xml"
 $UnattendXml | Out-File -FilePath $UnattendPath -Encoding utf8 -Width 2000 -Force
 
-
+Invoke-WebPSScript 'https://raw.githubusercontent.com/JPelletierSBI/osdcloudpoc/main/debloatWin11.ps1'
 
 #Restart
 restart-computer
