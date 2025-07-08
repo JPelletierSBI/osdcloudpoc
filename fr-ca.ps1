@@ -618,4 +618,4 @@ Powercfg /x -standby-timeout-ac 0
 powercfg /x -standby-timeout-dc 0
 
 #Restart
-#restart-computer
+restart-computer
