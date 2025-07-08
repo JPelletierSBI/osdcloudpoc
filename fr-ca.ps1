@@ -566,7 +566,7 @@ Function RegSetMachine {
 
 #Clean up the default start menu    
 Function ClearStartMenu {
-    If (1=1) {
+    If (1 -eq 1) {
 		Write-Host "***Setting empty start menu for new profiles...***"
 #Don't edit this. Creates empty start menu if -ClearStart is used.
         $StartLayoutStr = @"
