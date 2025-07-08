@@ -104,6 +104,22 @@ $UnattendXml = @'
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
   <settings pass="oobeSystem">
     <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
+      <UserAccounts>
+        <AdministratorPassword>
+          <Value></Value>
+          <PlainText>true</PlainText>
+        </AdministratorPassword>
+      </UserAccounts>
+      <AutoLogon>
+        <Enabled>true</Enabled>
+        <Username>Administrator</Username>
+        <Domain>.</Domain>
+        <Password>
+          <Value></Value>
+          <PlainText>true</PlainText>
+        </Password>
+        <LogonCount>999</LogonCount>
+      </AutoLogon>
       <OOBE>
         <HideEULAPage>true</HideEULAPage>
         <NetworkLocation>Work</NetworkLocation>
@@ -112,6 +128,12 @@ $UnattendXml = @'
         <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
         <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
       </OOBE>
+	<FirstLogonCommands>
+        <SynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Description>Enable password change at next logon</Description>
+          <CommandLine>cmd /c net user username /logonpasswordchg:yes</CommandLine>
+        </SynchronousCommand>
     </component>
     <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <InputLocale>0c0c:00001009</InputLocale>
@@ -544,7 +566,7 @@ Function RegSetMachine {
 
 #Clean up the default start menu    
 Function ClearStartMenu {
-    If ($ClearStart) {
+    If (1=1) {
 		Write-Host "***Setting empty start menu for new profiles...***"
 #Don't edit this. Creates empty start menu if -ClearStart is used.
         $StartLayoutStr = @"
@@ -590,6 +612,28 @@ If ($NoLog) {
 Write-Host "******Decrapifying Windows 10...******"
 RemoveApps
 ClearStartMenu
+Goodbye
+
+# Set variables to indicate value and key to set
+$RegistryPath = 'HKLM:\SOFTWARE\Policies\Microsoft\Edge'
+$Name         = 'HideFirstRunExperience'
+$Value        = '00000001'
+# Create the key if it does not exist
+If (-NOT (Test-Path $RegistryPath)) {
+  New-Item -Path $RegistryPath -Force | Out-Null
+}  
+# Now set the value
+New-ItemProperty -Path $RegistryPath -Name $Name -Value $Value -PropertyType DWORD -Force
+
+powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
+powercfg /x -hibernate-timeout-ac 0
+powercfg /x -hibernate-timeout-dc 0
+powercfg /x -disk-timeout-ac 0
+powercfg /x -disk-timeout-dc 0
+powercfg /x -monitor-timeout-ac 0
+powercfg /x -monitor-timeout-dc 0
+Powercfg /x -standby-timeout-ac 0
+powercfg /x -standby-timeout-dc 0
 
 #Restart
 restart-computer
