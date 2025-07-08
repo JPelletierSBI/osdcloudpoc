@@ -594,36 +594,17 @@ Function ClearStartMenu {
 }
 
 
-#Goodbye Message Function
-Function Goodbye {
-    Write-Host "*******Decrapification complete.*******"
-	Write-Host "*******Remember to set your execution policy back!  Set-Executionpolicy restricted is the Windows 10 default.*******"
-    Write-Host "*******Reboot your computer now!*******"     
-}
-
 #---End of functions---
 
-
-#Decrapify
-If ($NoLog) {
-}Else  {
-	Start-Transcript $ENV:SYSTEMDRIVE\WindowsDCtranscript.txt
-}
-Write-Host "******Decrapifying Windows 10...******"
 RemoveApps
 ClearStartMenu
-Goodbye
 
-# Set variables to indicate value and key to set
-$RegistryPath = 'HKLM:\SOFTWARE\Policies\Microsoft\Edge'
-$Name         = 'HideFirstRunExperience'
-$Value        = '00000001'
-# Create the key if it does not exist
-If (-NOT (Test-Path $RegistryPath)) {
-  New-Item -Path $RegistryPath -Force | Out-Null
+# Set variables to indicate value and key to set# Create the key if it does not exist
+If (-NOT (Test-Path 'HKLM:\SOFTWARE\Policies\Microsoft\Edge')) {
+  New-Item -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Edge' -Force | Out-Null
 }  
 # Now set the value
-New-ItemProperty -Path $RegistryPath -Name $Name -Value $Value -PropertyType DWORD -Force
+New-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Edge' -Name 'HideFirstRunExperience' -Value '00000001' -PropertyType DWORD -Force
 
 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
 powercfg /x -hibernate-timeout-ac 0
