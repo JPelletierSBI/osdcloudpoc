@@ -21,8 +21,8 @@ If you know to know a full list of variables, look here: https://github.com/OSDe
 #>
 
 
-$ScriptName = 'sample.garytown.com'
-$ScriptVersion = '24.06.28.01'
+$ScriptName = 'jear.installWin11.fr.ca'
+$ScriptVersion = '1.0.0.0'
 Write-Host -ForegroundColor Green "$ScriptName $ScriptVersion"
 
 
@@ -31,11 +31,11 @@ Write-Host -ForegroundColor Green "$ScriptName $ScriptVersion"
 
 #Variables to define the Windows OS / Edition etc to be applied during OSDCloud
 $OSVersion = 'Windows 11' #Used to Determine Driver Pack
-$OSReleaseID = '23H2' #Used to Determine Driver Pack
-$OSName = 'Windows 11 23H2 x64'
+$OSReleaseID = '24H2' #Used to Determine Driver Pack
+$OSName = 'Windows 11 24H2 x64'
 $OSEdition = 'Pro'
 $OSActivation = 'Retail'
-$OSLanguage = 'en-us'
+$OSLanguage = 'fr-ca'
 
 
 #Set OSDCloud Vars
@@ -54,7 +54,7 @@ $Global:MyOSDCloud = [ordered]@{
 
 #Testing Custom Images - Use this if you want to automate using your own WIM / ESD file
 #Region Custom Image
-$ESDName = '22621.382.220806-0833.ni_release_svc_refresh_CLIENTCONSUMER_RET_x64FRE_en-us.esd'
+$ESDName = 'CAP_SBI_FR.wim'
 $ImageFileItem = Find-OSDCloudFile -Name $ESDName  -Path '\OSDCloud\OS\'
 if ($ImageFileItem){
     $ImageFileItem = $ImageFileItem | Where-Object {$_.FullName -notlike "C*"} | Where-Object {$_.FullName -notlike "X*"} | Select-Object -First 1
