@@ -134,6 +134,7 @@ $UnattendXml = @'
           <Description>Enable password change at next logon</Description>
           <CommandLine>cmd /c net user username /logonpasswordchg:yes</CommandLine>
         </SynchronousCommand>
+	</FirstLogonCommands>
     </component>
     <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <InputLocale>0c0c:00001009</InputLocale>
